@@ -1,12 +1,19 @@
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+// import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteContact } from '../../redux/Phonebook/phone-actions';
 import s from './ContactList.module.css';
 
-export default function ContactList({ contacts, onDeleteContact }) {
-  // const contacts=useSelector(state => )
-  // const contacts = useSelector((state) => 123)
+export default function ContactList() {
+  const getVisibleContacts = state => state.contacts;
+  // const normalizeFilter = filter.toLowerCase();
+  // return contacts.filter(contact =>
+  //   contact.name.toLowerCase().includes(normalizeFilter),
+  // );
 
-  console.log(contacts);
+  const contacts = useSelector(getVisibleContacts);
+  const dispatch = useDispatch();
+
   return (
     <ul className={s.list}>
       {contacts.map(({ name, number, id }) => (
@@ -16,7 +23,7 @@ export default function ContactList({ contacts, onDeleteContact }) {
             <p className={s.number}> {number}</p>
           </div>
 
-          <button type="button" onClick={() => onDeleteContact(id)}>
+          <button type="button" onClick={() => dispatch(deleteContact(id))}>
             Delete
           </button>
         </li>
@@ -29,3 +36,15 @@ ContactList.propTypes = {
   contacts: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
   onDeleteContact: PropTypes.func.isRequired,
 };
+
+// const mapStateToProps = state => {
+//     return {
+//         contacts: state.contacts,
+//     };
+// };
+
+// const mapDispatchToProps = dispatch => ({
+//   onAddNote: () => null
+// });
+
+// export default connect(mapStateToProps, mapDispatchToProps)(ContactList);
