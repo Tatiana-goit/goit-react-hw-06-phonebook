@@ -1,18 +1,21 @@
 import PropTypes from 'prop-types';
-// import { connect } from 'react-redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteContact } from '../../redux/Phonebook/phone-actions';
+import {getFiltredContacts} from '../../redux/Phonebook/phone-selector'
 import s from './ContactList.module.css';
 
 export default function ContactList() {
-  const getVisibleContacts = state => state.contacts;
+
+  
   // const normalizeFilter = filter.toLowerCase();
   // return contacts.filter(contact =>
   //   contact.name.toLowerCase().includes(normalizeFilter),
   // );
 
-  const contacts = useSelector(getVisibleContacts);
+  const contacts = useSelector(getFiltredContacts);
   const dispatch = useDispatch();
+
+ 
 
   return (
     <ul className={s.list}>
@@ -33,18 +36,5 @@ export default function ContactList() {
 }
 
 ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
-  onDeleteContact: PropTypes.func.isRequired,
+  contacts: PropTypes.array,
 };
-
-// const mapStateToProps = state => {
-//     return {
-//         contacts: state.contacts,
-//     };
-// };
-
-// const mapDispatchToProps = dispatch => ({
-//   onAddNote: () => null
-// });
-
-// export default connect(mapStateToProps, mapDispatchToProps)(ContactList);

@@ -1,11 +1,15 @@
 import { useState } from 'react';
-import { connect } from 'react-redux';
-import {addContact} from '../../redux/Phonebook/phone-actions'
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { addContact } from '../../redux/Phonebook/phone-actions';
+import { getContacts } from '../../redux/Phonebook/phone-selector';
 import s from './ContactForm.module.css';
 
-function Form({ onAddNote }) {
+export default function Form() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+  const contacts = useSelector(getContacts);
+  const dispatch = useDispatch();
 
   const handleChange = e => {
     const { name, value } = e.currentTarget;
@@ -23,7 +27,14 @@ function Form({ onAddNote }) {
 
   const handleSubmit = e => {
     e.preventDefault();
-    onAddNote({ name, number })
+    const comparableElement = contacts.some(
+      element => element.name.toLowerCase() === name.toLowerCase(),
+    );
+    if (comparableElement) {
+      resetForm();
+      return alert(`${name} is already in the directory`);
+    }
+    dispatch(addContact({ name, number }));
     resetForm();
   };
 
@@ -70,15 +81,3 @@ function Form({ onAddNote }) {
     </div>
   );
 }
-
-// const mapStateToProps = state => {
-//     return {
-//         contactsList: state.contacts,
-//     };
-// };
-
-const mapDispatchToProps = dispatch => ({
-    onAddNote: contact => dispatch(addContact(contact)),
-});
-
-export default connect(null, mapDispatchToProps)(Form);
